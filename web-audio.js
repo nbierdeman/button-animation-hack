@@ -1,27 +1,41 @@
-let AudioContextCrossBrowser = window.AudioContext || window.webkitAudioContext;
-let audioContext = new AudioContextCrossBrowser();
 let playButton = document.querySelector("#buttons-container1");
-let volume = audioContext.createGain();
+
+class Song {
+  constructor() {
+    const AudioContextCrossBrowser = window.AudioContext || window.webkitAudioContext;
+    this.audioContext = new AudioContextCrossBrowser();
+    this.masterVolume = this.audioContext.createGain();
+    this.masterVolume.gain.value = 0.3;
+    this.masterVolume.connect(this.audioContext.destination);
+  }
+  playNote({
+    type = "sine",
+    frequency = 440,
+    delayPlayback = 0,
+    attack = 0.1,
+    decay = 0.5,
+    sustain = 2,
+    release = 1
+  }) {
+    let oscillator = this.audioContext.createOscillator();
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+    let envelope = this.audioContext.createGain();
+    envelope.gain.setValueAtTime(0, this.audioContext.currentTime);
+    envelope.gain.linearRampToValueAtTime(1, this.audioContext.currentTime + delayPlayback + attack);
+    envelope.gain.setTargetAtTime(0.75, this.audioContext.currentTime + delayPlayback + attack, decay);
+    envelope.gain.setTargetAtTime(0, this.audioContext.currentTime + delayPlayback + attack + decay + sustain, release);
+    oscillator.connect(envelope);
+    envelope.connect(this.masterVolume);
+    oscillator.start(delayPlayback);
+    return this;
+  }
+}
 
 playButton.addEventListener("click", function() {
-  const oscillator1 = audioContext.createOscillator();
-  const oscillator2 = audioContext.createOscillator();
-  const oscillator3 = audioContext.createOscillator();
-  volume.gain.setValueAtTime(0, audioContext.currentTime);
-  volume.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
-  oscillator1.type = 'sine';
-  oscillator2.type = 'sine';
-  oscillator3.type = 'sine';
-  oscillator1.frequency.setValueAtTime(440, audioContext.currentTime); // value in hertz
-  oscillator2.frequency.setValueAtTime(523.25, audioContext.currentTime); // value in hertz
-  oscillator3.frequency.setValueAtTime(659.25, audioContext.currentTime); // value in hertz
-  oscillator1.connect(volume);
-  oscillator2.connect(volume);
-  oscillator3.connect(volume);
-  volume.connect(audioContext.destination);
-  oscillator1.start();
-  oscillator2.start();
-  oscillator3.start();
-  volume.gain.setTargetAtTime(0.2, audioContext.currentTime + 0.1, 2);
-  volume.gain.setTargetAtTime(0, audioContext.currentTime + 2.1, 1);
+  const song1 = new Song();
+  song1
+    .playNote({})
+    .playNote({ frequency: 523.25 })
+    .playNote({ frequency: 659.25, delayPlayback: 2 })
 });
