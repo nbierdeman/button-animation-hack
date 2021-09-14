@@ -109,14 +109,15 @@ class Song {
   }
 
   playNote({
+    note = 'A4',
     type = "sine",
-    frequency = 440,
     delayPlayback = 0,
     attack = 0.2,
     decay = 0.5,
     sustain = 1,
     release = 0.1,
   }) {
+    let frequency = frequencyFromNote(note);
     let offset = this.audioContext.currentTime + 0.1;
     let oscillator = this.audioContext.createOscillator();
     oscillator.type = type;
@@ -167,20 +168,27 @@ let last16thNoteDrawn = -1;
 playButton.addEventListener("click", function () {
   song1 = new Song();
   song1
-    //.playNote({})
-    .playNote({ frequency: 523.25 })
-    .playNote({ frequency: 554.37 })
-    .playNote({ frequency: 659.25, delayPlayback: 2 })
+    .playNote({ note: "C4", delayPlayback: 2 })
+    .playNote({ note: "C4", delayPlayback: 4 })
+    .playNote({ note: "G4", delayPlayback: 6 })
+    .playNote({ note: "G4", delayPlayback: 8 })
+    .playNote({ note: "A4", delayPlayback: 10 })
+    .playNote({ note: "A4", delayPlayback: 12 })
+    .playNote({ note: "G4", delayPlayback: 14 })
+  // .playNote({})
+    // .playNote({ note: "C5" })
+    // .playNote({ frequency: "C#5" })
+    // .playNote({ frequency: "E5", delayPlayback: 2 })
     // kick drum addition
-    .playNote({ frequency: 220, delayPlayback: 0, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
-    .playNote({ frequency: 220, delayPlayback: 1, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
-    .playNote({ frequency: 220, delayPlayback: 2, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
-    .playNote({ frequency: 220, delayPlayback: 3, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
-    .playNote({ frequency: 220, delayPlayback: 4, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
-    .playNote({ frequency: 220, delayPlayback: 5, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
-    .playNote({ frequency: 220, delayPlayback: 6, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
-    .playNote({ frequency: 220, delayPlayback: 7, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
-    .playNote({ frequency: 220, delayPlayback: 8, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 });
+    // .playNote({ frequency: "A3", delayPlayback: 0, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
+    // .playNote({ frequency: "A3", delayPlayback: 1, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
+    // .playNote({ frequency: "A3", delayPlayback: 2, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
+    // .playNote({ frequency: "A3", delayPlayback: 3, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
+    // .playNote({ frequency: "A3", delayPlayback: 4, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
+    // .playNote({ frequency: "A3", delayPlayback: 5, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
+    // .playNote({ frequency: "A3", delayPlayback: 6, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
+    // .playNote({ frequency: "A3", delayPlayback: 7, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 })
+    // .playNote({ frequency: "A3", delayPlayback: 8, attack: 0.1, decay: 0.1, sustain: 0, release: 0.1 });
 
   draw();
 });
