@@ -1,0 +1,24 @@
+{
+  "name": "@paypalcorp/button-animation-hack",
+  "version": "1.0.0",
+  "description": "See `button.html` for the starting point (a basic PayPal button you can build on)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettier": "prettier --write .",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.paypal.com:nbierdeman/button-animation-hack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.2",
+    "prettier": "^2.4.1"
+  }
+}
