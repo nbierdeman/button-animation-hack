@@ -77,7 +77,8 @@ export function frequencyFromNote(note) {
   const noteIndexOffset = getNoteIndex(noteName) - baseNote.halfStepsFromC4;
 
   const halfSteps = noteIndexOffset + (octave - baseNote.octave) * notes.length;
-  const frequency = baseNote.frequency * Math.pow(Math.pow(2, 1 / 12), halfSteps);
+  const frequency =
+    baseNote.frequency * Math.pow(Math.pow(2, 1 / 12), halfSteps);
   return frequency;
 }
 

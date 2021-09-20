@@ -1,7 +1,5 @@
 export default class Canvas {
-  constructor({
-    canvasElement, song, width = 50, height = 50,
-  }) {
+  constructor({ canvasElement, song, width = 50, height = 50 }) {
     this.canvas = canvasElement;
     this.song = song;
     this.width = width;

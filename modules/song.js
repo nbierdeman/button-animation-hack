@@ -16,7 +16,8 @@ export default class Song {
       '1/64': (this.beatsPerMeasure / 64) * this.beatInSeconds,
       '1/128': (this.beatsPerMeasure / 128) * this.beatInSeconds,
     };
-    const AudioContextCrossBrowser = window.AudioContext || window.webkitAudioContext;
+    const AudioContextCrossBrowser =
+      window.AudioContext || window.webkitAudioContext;
     this.audioContext = new AudioContextCrossBrowser();
     this.masterVolume = this.audioContext.createGain();
     this.masterVolume.gain.value = 0.3;
@@ -64,7 +65,10 @@ export default class Song {
     envelope.gain.setValueAtTime(0, offset);
     envelope.gain.linearRampToValueAtTime(1, offset + attack);
     envelope.gain.linearRampToValueAtTime(0.75, offset + attack + decay);
-    envelope.gain.linearRampToValueAtTime(0.75, offset + attack + sustain + decay);
+    envelope.gain.linearRampToValueAtTime(
+      0.75,
+      offset + attack + sustain + decay,
+    );
     envelope.gain.linearRampToValueAtTime(
       0,
       offset + attack + sustain + decay + release,
