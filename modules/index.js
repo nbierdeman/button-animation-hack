@@ -15,13 +15,15 @@ canvas.drawSnowMan();
 
 playButton.addEventListener('click', () => {
   song1
-    .playNote({ note: 'C4' })
-    .playNote({ note: 'C4' })
-    .playNote({ note: 'G4' })
-    .playNote({ note: 'G4' })
-    .playNote({})
-    .playNote({})
-    .playNote({ note: 'G4', duration: '1/2' });
+    .playNotes({ notes: ['C4', 'C5'] })
+    .playNotes({ notes: ['C4', 'C5'] })
+    .playNotes({ notes: ['G4'] })
+    .playNotes({ notes: ['G4'] })
+    .playNotes({ notes: ['A4'] })
+    .playNotes({ notes: ['A4'] })
+    .playNotes({ notes: ['G4'], duration: '1/2' })
+    .playNotes({ notes: [], duration: '1/2' })
+    .playNotes({ notes: ['C4', 'E4', 'G4', 'C5'], duration: '1' });
 
   canvas.draw();
 });

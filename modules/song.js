@@ -26,15 +26,16 @@ export default class Song {
     this.previousNoteEndTime = 0;
   }
 
-  playNote({
-    note = 'A4',
+  playNotes({
+    notes = [],
     type = 'sine',
     duration = '1/4',
-    attack = 0.1,
-    decay = 0.2,
-    release = 0.1,
+    attackTime = 0.1,
+    decayTime = 0.2,
+    releaseTime = 0.1,
+    attackGain = 1,
+    sustainGain = 0.75,
   }) {
-    const frequency = frequencyFromNote(note);
     const durationInSeconds = this.notesInSeconds[duration];
 
     if (this.previousNoteEndTime < this.audioContext.currentTime) {
@@ -45,37 +46,91 @@ export default class Song {
     const offset = this.previousNoteEndTime + 0.1;
     this.previousNoteEndTime += durationInSeconds;
 
-    const oscillator = this.audioContext.createOscillator();
-    oscillator.type = type;
-    oscillator.frequency.value = frequency;
+    const oscillators = notes.map((note) => {
+      const frequency = frequencyFromNote(note);
+      const oscillator = this.audioContext.createOscillator();
+      oscillator.type = type;
+      oscillator.frequency.value = frequency;
 
-    const envelope = this.audioContext.createGain();
-    envelope.gain.setValueAtTime(0, this.audioContext.currentTime);
+      return oscillator;
+    });
 
-    oscillator.connect(envelope);
-    envelope.connect(this.masterVolume);
-
-    oscillator.start();
-
-    let sustain = 0;
-    if (durationInSeconds - attack - decay - release > 0) {
-      sustain = durationInSeconds - attack - decay - release;
+    let sustainTime = 0;
+    if (durationInSeconds - attackTime - decayTime - releaseTime > 0) {
+      sustainTime = durationInSeconds - attackTime - decayTime - releaseTime;
     }
 
-    envelope.gain.setValueAtTime(0, offset);
-    envelope.gain.linearRampToValueAtTime(1, offset + attack);
-    envelope.gain.linearRampToValueAtTime(0.75, offset + attack + decay);
-    envelope.gain.linearRampToValueAtTime(
-      0.75,
-      offset + attack + sustain + decay,
-    );
-    envelope.gain.linearRampToValueAtTime(
-      0,
-      offset + attack + sustain + decay + release,
-    );
+    const envelope = this.createADSREnvelope({
+      startTime: offset,
+      attackTime,
+      decayTime,
+      sustainTime,
+      releaseTime,
+      attackGain,
+      sustainGain,
+    });
+
+    oscillators.forEach((oscillator) => {
+      oscillator.connect(envelope);
+      oscillator.start();
+    });
+
+    const compressor = this.createDynamicsCompressor({});
+    envelope.connect(compressor);
+    compressor.connect(this.masterVolume);
 
     this.notesQueue.push({ timestamp: offset });
 
     return this;
+  }
+
+  createDynamicsCompressor({
+    threshold = -50,
+    knee = 40,
+    ratio = 12,
+    attack = 0,
+    release = 0.25,
+  }) {
+    const compressor = this.audioContext.createDynamicsCompressor();
+    compressor.threshold.setValueAtTime(
+      threshold,
+      this.audioContext.currentTime,
+    );
+    compressor.knee.setValueAtTime(knee, this.audioContext.currentTime);
+    compressor.ratio.setValueAtTime(ratio, this.audioContext.currentTime);
+    compressor.attack.setValueAtTime(attack, this.audioContext.currentTime);
+    compressor.release.setValueAtTime(release, this.audioContext.currentTime);
+
+    return compressor;
+  }
+
+  createADSREnvelope({
+    startTime,
+    attackTime = 0.1,
+    decayTime = 0.2,
+    sustainTime = 1,
+    releaseTime = 0.1,
+    attackGain = 1,
+    sustainGain = 0.75,
+  }) {
+    const envelope = this.audioContext.createGain();
+    envelope.gain.setValueAtTime(0, this.audioContext.currentTime);
+
+    envelope.gain.setValueAtTime(0, startTime);
+    envelope.gain.linearRampToValueAtTime(attackGain, startTime + attackTime);
+    envelope.gain.linearRampToValueAtTime(
+      sustainGain,
+      startTime + attackTime + decayTime,
+    );
+    envelope.gain.linearRampToValueAtTime(
+      sustainGain,
+      startTime + attackTime + sustainTime + decayTime,
+    );
+    envelope.gain.linearRampToValueAtTime(
+      0,
+      startTime + attackTime + sustainTime + decayTime + releaseTime,
+    );
+
+    return envelope;
   }
 }
