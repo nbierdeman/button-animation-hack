@@ -22,8 +22,12 @@ export default class Song {
     this.masterVolume = this.audioContext.createGain();
     this.masterVolume.gain.value = 0.3;
     this.masterVolume.connect(this.audioContext.destination);
+    this.startDelay = 0.1;
+
     this.notesQueue = [];
-    this.previousNoteEndTime = 0;
+    this.beatNumber = 1;
+    this.lastNoteEndTime = 0;
+    this.lastBeatStartTime = 0;
   }
 
   playNotes({
@@ -38,13 +42,14 @@ export default class Song {
   }) {
     const durationInSeconds = this.notesInSeconds[duration];
 
-    if (this.previousNoteEndTime < this.audioContext.currentTime) {
+    if (this.lastNoteEndTime <= this.audioContext.currentTime) {
       // start the song
-      this.previousNoteEndTime = this.audioContext.currentTime;
+      this.lastNoteEndTime = this.audioContext.currentTime + this.startDelay;
+      this.lastBeatTime = this.audioContext.currentTime + this.startDelay;
     }
 
-    const offset = this.previousNoteEndTime + 0.1;
-    this.previousNoteEndTime += durationInSeconds;
+    const offset = this.lastNoteEndTime;
+    this.lastNoteEndTime += durationInSeconds;
 
     const oscillators = notes.map((note) => {
       const frequency = frequencyFromNote(note);
@@ -79,9 +84,54 @@ export default class Song {
     envelope.connect(compressor);
     compressor.connect(this.masterVolume);
 
-    this.notesQueue.push({ timestamp: offset });
+    this.notesQueue.push({
+      timestamp: offset,
+      notes,
+    });
 
     return this;
+  }
+
+  onBeat(callback) {
+    if (this.lastNoteEndTime < this.audioContext.currentTime) {
+      // stop after the song is over
+      this.lastBeatTime = 0;
+    }
+
+    if (
+      this.lastBeatTime &&
+      this.audioContext.currentTime >= this.lastBeatTime
+    ) {
+      let currentNote;
+
+      if (
+        this.notesQueue.length &&
+        this.notesQueue[0].timestamp < this.audioContext.currentTime
+      ) {
+        [currentNote] = this.notesQueue;
+        this.notesQueue.splice(0, 1);
+      }
+
+      if (typeof callback === 'function') {
+        callback({
+          beatNumber: this.beatNumber,
+          beatTime: this.lastBeatTime,
+          currentNote,
+        });
+      }
+
+      this.lastBeatTime += this.beatInSeconds;
+
+      if (this.beatNumber === this.beatsPerMeasure) {
+        this.beatNumber = 1;
+      } else {
+        this.beatNumber += 1;
+      }
+    }
+
+    requestAnimationFrame(() => {
+      this.onBeat.bind(this)(callback);
+    });
   }
 
   createDynamicsCompressor({

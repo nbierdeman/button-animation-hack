@@ -81,24 +81,4 @@ export default class Canvas {
     const multiplier = Math.random() + 1;
     this.drawSnowMan(multiplier);
   }
-
-  draw() {
-    let currentNote = this.lastNoteProcessed;
-    const { currentTime } = this.song.audioContext;
-    const notesInQueue = this.song.notesQueue;
-
-    while (notesInQueue.length && notesInQueue[0].timestamp < currentTime) {
-      currentNote = notesInQueue[0].timestamp;
-      notesInQueue.splice(0, 1); // remove note from queue
-    }
-
-    // We only need to draw if the note has moved.
-    if (this.lastNoteProcessed !== currentNote) {
-      this.makeSnowManDance();
-      this.lastNoteProcessed = currentNote;
-    }
-
-    // set up to draw again
-    requestAnimationFrame(this.draw.bind(this));
-  }
 }
