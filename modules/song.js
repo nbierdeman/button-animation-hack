@@ -1,4 +1,5 @@
 import { frequencyFromNote } from './note-frequency.js';
+import customOscillators from './custom-oscillators.js';
 
 export default class Song {
   constructor({ beatsPerMinute = 60, beatsPerMeasure = 4 }) {
@@ -32,7 +33,7 @@ export default class Song {
 
   playNotes({
     notes = [],
-    type = 'sine',
+    type = 'bass',
     duration = '1/4',
     attackTime = 0.1,
     decayTime = 0.2,
@@ -54,8 +55,10 @@ export default class Song {
     const oscillators = notes.map((note) => {
       const frequency = frequencyFromNote(note);
       const oscillator = this.audioContext.createOscillator();
-      oscillator.type = type;
       oscillator.frequency.value = frequency;
+      oscillator.setPeriodicWave(
+        this.createPeriodicWave(customOscillators[type]),
+      );
 
       return oscillator;
     });
@@ -182,5 +185,12 @@ export default class Song {
     );
 
     return envelope;
+  }
+
+  createPeriodicWave(table) {
+    const real = new Float32Array(table);
+    const imag = real.map(() => 0);
+    const periodicWave = this.audioContext.createPeriodicWave(real, imag);
+    return periodicWave;
   }
 }

@@ -15,7 +15,9 @@ const beatNumberLabel = document.querySelector('#beat');
 song1.onBeat(({ currentNote, beatNumber }) => {
   canvas.makeSnowManDance();
   if (currentNote && currentNote.notes) {
-    noteLabel.innerHTML =  currentNote.notes.length ? currentNote.notes.toString() : 'rest';
+    noteLabel.innerHTML = currentNote.notes.length
+      ? currentNote.notes.toString()
+      : 'rest';
   }
 
   beatNumberLabel.innerHTML = beatNumber;
