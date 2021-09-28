@@ -1,4 +1,4 @@
-import Song from './song.js';
+import Song from '../../modules/song.js';
 import Canvas from './canvas.js';
 
 const playButton = document.querySelector('#buttons-container1');

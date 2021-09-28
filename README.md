@@ -1,3 +1,6 @@
 # button-animation-hack
 
-See `button.html` for the starting point (a basic PayPal button you can build on)
+The demos are located under the demo folder:
+
+- demos/snowman/index.html
+- TODO: add more demos
