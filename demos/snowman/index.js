@@ -5,7 +5,7 @@ import Canvas from './canvas.js';
 const playButton = document.querySelector('#buttons-container1');
 const canvasElement = document.querySelector('#animations');
 
-const song1 = new Song({ beatsPerMinute: 90 });
+const song1 = new Song({ beatsPerMinute: 140 });
 const canvas = new Canvas({ canvasElement });
 
 // share song with popup
@@ -29,15 +29,44 @@ song1.onBeat(({ currentNote, beatNumber }) => {
 
 playButton.addEventListener('click', () => {
   song1
-    .playNotes({ notes: ['C4', 'C5'] })
-    .playNotes({ notes: ['C4', 'C5'] })
-    .playNotes({ notes: ['G4'] })
-    .playNotes({ notes: ['G4'] })
-    .playNotes({ notes: ['A4'] })
-    .playNotes({ notes: ['A4'] })
+    // measure 1
     .playNotes({ notes: ['G4'], duration: '1/2' })
-    .playNotes({ notes: [], duration: '1/2' })
-    .playNotes({ notes: ['C4', 'E4', 'G4', 'C5'], duration: '1' });
+    .playNotes({ notes: ['E4'], duration: '3/8' })
+    .playNotes({ notes: ['F4'], duration: '1/8' })
+    // measure 2
+    .playNotes({ notes: ['G4'], duration: '1/4' })
+    .playNotes({ notes: ['C5'], duration: '1/2' })
+    .playNotes({ notes: ['B4'], duration: '1/8' })
+    .playNotes({ notes: ['C5'], duration: '1/8' })
+    // measure 3
+    .playNotes({ notes: ['D5'], duration: '1/4' })
+    .playNotes({ notes: ['C5'], duration: '1/4' })
+    .playNotes({ notes: ['B4'], duration: '1/4' })
+    .playNotes({ notes: ['A4'], duration: '1/4' })
+    // measure 4
+    .playNotes({ notes: ['G4'], duration: '3/4' })
+    .playNotes({ notes: ['B4'], duration: '1/4' })
+    .playNotes({ notes: ['C5'], duration: '1/4' })
+    // measure 5
+    .playNotes({ notes: ['D5'], duration: '1/4' })
+    .playNotes({ notes: ['C5'], duration: '1/4' })
+    .playNotes({ notes: ['B4'], duration: '1/4' })
+    .playNotes({ notes: ['A4'], duration: '1/8' })
+    .playNotes({ notes: ['A4'], duration: '1/8' })
+    // measure 6
+    .playNotes({ notes: ['G4'], duration: '1/4' })
+    .playNotes({ notes: ['C5'], duration: '1/4' })
+    .playNotes({ notes: ['E4'], duration: '1/4' })
+    .playNotes({ notes: ['G4'], duration: '1/8' })
+    .playNotes({ notes: ['A4'], duration: '1/8' })
+    // measure 7
+    .playNotes({ notes: ['G4'], duration: '1/4' })
+    .playNotes({ notes: ['F4'], duration: '1/4' })
+    .playNotes({ notes: ['E4'], duration: '1/4' })
+    .playNotes({ notes: ['F4'], duration: '1/4' })
+    // measure 8
+    .playNotes({ notes: ['G4'], duration: '3/4' })
+    .playNotes({ notes: [], duration: '1/4' });
 
   setTimeout(() => {
     openPopup({

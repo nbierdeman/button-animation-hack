@@ -10,8 +10,10 @@ export default class Song {
     this.notesInSeconds = {
       1: this.beatsPerMeasure * this.beatInSeconds,
       '1/2': (this.beatsPerMeasure / 2) * this.beatInSeconds,
+      '3/4': ((this.beatsPerMeasure * 3) / 4) * this.beatInSeconds,
       '1/4': (this.beatsPerMeasure / 4) * this.beatInSeconds,
       '1/8': (this.beatsPerMeasure / 8) * this.beatInSeconds,
+      '3/8': ((this.beatsPerMeasure * 3) / 8) * this.beatInSeconds,
       '1/16': (this.beatsPerMeasure / 16) * this.beatInSeconds,
       '1/32': (this.beatsPerMeasure / 32) * this.beatInSeconds,
       '1/64': (this.beatsPerMeasure / 64) * this.beatInSeconds,
