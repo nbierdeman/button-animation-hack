@@ -1,4 +1,5 @@
 import Song from '../../modules/song.js';
+import { openPopup } from '../../modules/popup.js';
 import Canvas from './canvas.js';
 
 const playButton = document.querySelector('#buttons-container1');
@@ -6,6 +7,9 @@ const canvasElement = document.querySelector('#animations');
 
 const song1 = new Song({ beatsPerMinute: 90 });
 const canvas = new Canvas({ canvasElement });
+
+// share song with popup
+window.song = song1;
 
 canvas.drawSnowMan();
 
@@ -34,4 +38,13 @@ playButton.addEventListener('click', () => {
     .playNotes({ notes: ['G4'], duration: '1/2' })
     .playNotes({ notes: [], duration: '1/2' })
     .playNotes({ notes: ['C4', 'E4', 'G4', 'C5'], duration: '1' });
+
+  setTimeout(() => {
+    openPopup({
+      url: 'popup.html',
+      name: 'testWindowName',
+      width: 600,
+      height: 600,
+    });
+  }, 1000);
 });

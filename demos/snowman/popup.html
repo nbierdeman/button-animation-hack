@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<head></head>
+
+<body>
+  <p id="note"></p>
+  <p id="beat"></p>
+  <canvas id="animations"></canvas>
+
+  <script type="module">
+    import Canvas from './canvas.js';
+
+    const noteLabel = document.querySelector('#note');
+    const beatNumberLabel = document.querySelector('#beat');
+    const canvasElement = document.querySelector('#animations');
+
+    const canvas = new Canvas({ canvasElement });
+
+    canvas.drawSnowMan();
+
+    const song1 = window.opener.song;
+
+    song1.onBeat(({ currentNote, beatNumber }) => {
+      canvas.makeSnowManDance();
+      if (currentNote && currentNote.notes) {
+        noteLabel.innerHTML = currentNote.notes.length
+          ? currentNote.notes.toString()
+          : 'rest';
+      }
+
+      beatNumberLabel.innerHTML = beatNumber;
+    });
+  </script>
+</body>

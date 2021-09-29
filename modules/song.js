@@ -29,6 +29,9 @@ export default class Song {
     this.beatNumber = 1;
     this.lastNoteEndTime = 0;
     this.lastBeatStartTime = 0;
+
+    this.onBeatCallbacks = [];
+    this.onBeatInterval();
   }
 
   playNotes({
@@ -96,6 +99,10 @@ export default class Song {
   }
 
   onBeat(callback) {
+    this.onBeatCallbacks.push(callback);
+  }
+
+  onBeatInterval() {
     if (this.lastNoteEndTime < this.audioContext.currentTime) {
       // stop after the song is over
       this.lastBeatTime = 0;
@@ -115,11 +122,13 @@ export default class Song {
         this.notesQueue.splice(0, 1);
       }
 
-      if (typeof callback === 'function') {
-        callback({
-          beatNumber: this.beatNumber,
-          beatTime: this.lastBeatTime,
-          currentNote,
+      if (Array.isArray(this.onBeatCallbacks)) {
+        this.onBeatCallbacks.forEach((callback) => {
+          callback({
+            beatNumber: this.beatNumber,
+            beatTime: this.lastBeatTime,
+            currentNote,
+          });
         });
       }
 
@@ -133,7 +142,7 @@ export default class Song {
     }
 
     requestAnimationFrame(() => {
-      this.onBeat.bind(this)(callback);
+      this.onBeatInterval.bind(this)(this.onBeatCallbacks);
     });
   }
 
