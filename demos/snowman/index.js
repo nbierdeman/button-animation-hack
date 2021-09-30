@@ -1,17 +1,27 @@
 import Song from '../../modules/song.js';
 import { openPopup } from '../../modules/popup.js';
-import Canvas from './canvas.js';
+import Snowman from './snowman.js';
+import './snow.js'
+import Snow from './snow.js';
 
 const playButton = document.querySelector('#buttons-container1');
 const canvasElement = document.querySelector('#animations');
+const snowCanvas = document.querySelector('#snow');
 
 const song1 = new Song({ beatsPerMinute: 140 });
-const canvas = new Canvas({ canvasElement });
+const canvas = new Snowman({ canvasElement });
+const snow = new Snow({canvasElement: snowCanvas, width: 750, height: 55});
+
 
 // share song with popup
 window.song = song1;
 
 canvas.drawSnowMan();
+const startSnowing = () => {
+  snow.render();
+  requestAnimationFrame(startSnowing);
+}
+startSnowing();
 
 const noteLabel = document.querySelector('#note');
 const beatNumberLabel = document.querySelector('#beat');

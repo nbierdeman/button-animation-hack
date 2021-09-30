@@ -8,6 +8,20 @@
   data-render-version="5.0.248"
   style="background-color: #2c7cb1"
 >
+  
+  <style>
+    /*
+     * Hacky styles for animations on button
+     */
+    .buttons-container {
+      position: relative;
+    }
+
+    canvas {
+      position: absolute;
+      z-index: 99;
+    }
+  </style>
   <style nonce="">
     .buttons-container {
       transition: all 0.3s ease-in-out;
@@ -1347,11 +1361,6 @@
       }
     }
   </style>
-
-  <!--<div style="position: absolute;right: 500px; top:100px;background-color:black;">-->
-  <canvas id="animations"></canvas>
-  <!--</div>-->
-
   <p id="note"></p>
   <p id="beat"></p>
 
@@ -1361,6 +1370,8 @@
     role="main"
     aria-label="PayPal"
   >
+    <canvas id="animations"></canvas>
+    <canvas id="snow"></canvas>
     <div
       class="
         paypal-button-container

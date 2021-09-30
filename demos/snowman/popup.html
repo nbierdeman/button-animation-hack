@@ -8,13 +8,13 @@
   <canvas id="animations"></canvas>
 
   <script type="module">
-    import Canvas from './canvas.js';
+    import Snowman from './snowman.js';
 
     const noteLabel = document.querySelector('#note');
     const beatNumberLabel = document.querySelector('#beat');
     const canvasElement = document.querySelector('#animations');
 
-    const canvas = new Canvas({ canvasElement });
+    const canvas = new Snowman({ canvasElement });
 
     canvas.drawSnowMan();
 

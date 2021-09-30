@@ -1,4 +1,4 @@
-export default class Canvas {
+export default class Snowman {
   constructor({ canvasElement, song, width = 50, height = 50 }) {
     this.canvas = canvasElement;
     this.song = song;
