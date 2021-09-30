@@ -29,8 +29,6 @@ export default class Song {
     this.isPlaying = false;
 
     this.allOscillators = [];
-    this.notesQueue = [];
-    this.lastBeatStartTime = 0;
 
     this.tracks = [];
 
@@ -42,6 +40,7 @@ export default class Song {
     tracks.forEach((track, trackIndex) => {
       this.tracks.push({
         lastNoteEndTime: 0,
+        notesQueue: []
       });
 
       track.forEach((notes) => {
@@ -137,7 +136,7 @@ export default class Song {
     delayOutput.connect(compressor);
     compressor.connect(this.masterVolume);
 
-    this.notesQueue.push({
+    this.tracks[trackIndex].notesQueue.push({
       timestamp: offset,
       notes,
     });
@@ -150,10 +149,7 @@ export default class Song {
   }
 
   onBeatInterval() {
-    if (
-      !this.notesQueue.length &&
-      this.tracks[0].lastNoteEndTime < this.audioContext.currentTime
-    ) {
+    if (!this.tracks[0] ||this.tracks[0].lastNoteEndTime < this.audioContext.currentTime) {
       // stop after the song is over
       this.lastBeatTime = 0;
       this.isPlaying = false;
@@ -166,11 +162,11 @@ export default class Song {
       let currentNote;
 
       if (
-        this.notesQueue.length &&
-        this.notesQueue[0].timestamp < this.audioContext.currentTime
+        this.tracks[0].notesQueue.length &&
+        this.tracks[0].notesQueue[0].timestamp < this.audioContext.currentTime
       ) {
-        [currentNote] = this.notesQueue;
-        this.notesQueue.splice(0, 1);
+        [currentNote] = this.tracks[0].notesQueue;
+        this.tracks[0].notesQueue.splice(0, 1);
       }
 
       if (Array.isArray(this.onBeatCallbacks)) {
@@ -328,13 +324,9 @@ export default class Song {
     setTimeout(() => {
       this.allOscillators.forEach((oscillator) => oscillator.stop());
       this.allOscillators = [];
-      this.notesQueue = [];
       this.beatNumber = 1;
-
-      this.lastBeatStartTime = 0;
       this.isPlaying = false;
-
-      this.tracks = this.tracks.map(() => ({ lastNoteEndTime: 0 }));
+      this.tracks = [];
     }, 1000);
   }
 }

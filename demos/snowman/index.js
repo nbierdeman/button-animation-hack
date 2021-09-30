@@ -31,18 +31,8 @@ const startSnowing = () => {
 };
 startSnowing();
 
-const noteLabel = document.querySelector('#note');
-const beatNumberLabel = document.querySelector('#beat');
-
-song1.onBeat(({ currentNote, beatNumber }) => {
+song1.onBeat(() => {
   canvas.makeSnowManDance();
-  if (currentNote && currentNote.notes) {
-    noteLabel.innerHTML = currentNote.notes.length
-      ? currentNote.notes.toString()
-      : 'rest';
-  }
-
-  beatNumberLabel.innerHTML = beatNumber;
 });
 
 let popup;
