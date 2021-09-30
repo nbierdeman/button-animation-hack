@@ -83,13 +83,29 @@ export default class Song {
       sustainGain,
     });
 
+    const compressor = this.createDynamicsCompressor({});
+
+    const { delayInput, delayOutput } = this.createDelay({
+      delayTime: 0.5,
+      feedback: 0.1,
+      cutoff: 14700,
+      wetLevel: 1,
+      dryLevel: 1
+    });
+
+    const bitcrusher = this.createBitcrusher({
+      bits: 16,
+      normfreq: 0.5
+    });
+
+    // signal routing
     oscillators.forEach((oscillator) => {
       oscillator.connect(envelope);
       oscillator.start();
     });
-
-    const compressor = this.createDynamicsCompressor({});
-    envelope.connect(compressor);
+    envelope.connect(bitcrusher);
+    bitcrusher.connect(delayInput);
+    delayOutput.connect(compressor);
     compressor.connect(this.masterVolume);
 
     this.notesQueue.push({
@@ -148,12 +164,75 @@ export default class Song {
     });
   }
 
+  createBitcrusher({
+    bits = 4,
+    bufferSize = 4096,
+    normfreq = 0.1
+  }) {
+    const processor = this.audioContext.createScriptProcessor(bufferSize, 1, 1);
+
+    let phaser = 0, last = 0, processorInput, processorOutput, step, i, length;
+
+    processor.onaudioprocess = function(e) {
+      processorInput = e.inputBuffer.getChannelData(0),
+      processorOutput = e.outputBuffer.getChannelData(0),
+      step = Math.pow(1 / 2, bits);
+      length = processorInput.length;
+      for (i = 0; i < length; i++) {
+        phaser += normfreq;
+        if (phaser >= 1.0) {
+          phaser -= 1.0;
+          last = step * Math.floor(processorInput[i] / step + 0.5);
+        }
+        processorOutput[i] = last;
+      }
+    };
+
+    return processor;
+  }
+
+  createDelay({
+    delayTime = 0.15,
+    feedback = 0.1,
+    cutoff = 14700,
+    wetLevel = 1,
+    dryLevel = 1,
+  }) {
+    const input = this.audioContext.createGain();
+    const dry = this.audioContext.createGain();
+    const wet = this.audioContext.createGain();
+    const filter = this.audioContext.createBiquadFilter();
+    const delay = new DelayNode(this.audioContext, { delayTime });
+    const feedbackNode = this.audioContext.createGain();
+    const output = this.audioContext.createGain();
+
+    input.connect(delay);
+    input.connect(dry);
+    delay.connect(filter);
+    filter.connect(feedbackNode);
+    feedbackNode.connect(delay);
+    feedbackNode.connect(wet);
+    wet.connect(output);
+    dry.connect(output);
+
+    feedbackNode.gain.value = feedback;
+    wet.gain.value = wetLevel;
+    dry.gain.value = dryLevel;
+    filter.frequency.value = cutoff;
+    filter.type = 'lowpass';
+
+    return {
+      delayInput: input,
+      delayOutput: output,
+    };
+  }
+
   createDynamicsCompressor({
-    threshold = -50,
+    threshold = -24,
     knee = 40,
-    ratio = 12,
-    attack = 0,
-    release = 0.25,
+    ratio = 4,
+    attack = 0.0001,
+    release = 0.125,
   }) {
     const compressor = this.audioContext.createDynamicsCompressor();
     compressor.threshold.setValueAtTime(
