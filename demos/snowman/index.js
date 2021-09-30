@@ -24,7 +24,6 @@ snowCanvas.addEventListener('mouseleave', () => {
 // share song with popup
 window.song = song1;
 
-canvas.drawSnowMan();
 const startSnowing = () => {
   snow.render();
   requestAnimationFrame(startSnowing);
