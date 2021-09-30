@@ -11,6 +11,16 @@ const song1 = new Song({ beatsPerMinute: 140 });
 const canvas = new Snowman({ canvasElement });
 const snow = new Snow({ canvasElement: snowCanvas, width: 750, height: 55 });
 
+const paypalButton = playButton.querySelector('div[role="button"]');
+
+snowCanvas.addEventListener('mouseenter', () => {
+  paypalButton.classList.add('hover');
+});
+
+snowCanvas.addEventListener('mouseleave', () => {
+  paypalButton.classList.remove('hover');
+});
+
 // share song with popup
 window.song = song1;
 
@@ -85,7 +95,7 @@ playButton.addEventListener('click', () => {
 
   setTimeout(() => {
     // reuse existing popup when playing again
-    if (popup) {
+    if (popup && !popup.closed) {
       popup.focus();
     } else {
       popup = openPopup({
