@@ -143,47 +143,47 @@ playButton.addEventListener('click', () => {
       { notes: ['G4'], duration: '1/2' },
       { notes: [], duration: '1/2' },
     ],
-    [
-      // intro bass measure 1
-      { notes: ['C3'], duration: '1/2' },
-      { notes: ['B2'], duration: '1/2' },
-      // intro bass measure 2
-      { notes: ['A2'], duration: '1/2' },
-      { notes: ['G2'], duration: '1/2' },
-      // intro bass measure 3
-      { notes: ['C3'], duration: '1/2' },
-      { notes: ['A#2'], duration: '1/2' },
-      // intro bass measure 4
-      { notes: ['B2'], duration: '1/2' },
-      { notes: ['G2'], duration: '1/2' },
-      // intro bass measure 5
-      { notes: [], duration: '1' },
-      // verse bass measure 1
-      { notes: ['C2'], duration: '1/2' },
-      { notes: ['A2'], duration: '1/2' },
-      // verse bass measure 2
-      { notes: ['G2'], duration: '1' },
-      // verse bass measure 3
-      { notes: ['F2'], duration: '1/2' },
-      { notes: ['F#2'], duration: '1/2' },
-      // verse bass measure 4
-      { notes: ['G2'], duration: '1/2' },
-      { notes: ['C2'], duration: '1/2' },
-      // verse bass measure 5
-      { notes: ['F2'], duration: '1/2' },
-      { notes: ['F#2'], duration: '1/2' },
-      // verse bass measure 6
-      { notes: ['G2'], duration: '1/2' },
-      { notes: ['C2'], duration: '1/2' },
-      // verse bass measure 7
-      { notes: ['D2'], duration: '1/2' },
-      { notes: ['B2'], duration: '1/2' },
-      // verse bass measure 8
-      { notes: ['E3'], duration: '1/2' },
-      { notes: ['G2'], duration: '1/2' },
-      // verse bass measure 9
-      { notes: ['C2'], duration: '1' },
-    ],
+    // [
+    //   // intro bass measure 1
+    //   { notes: ['C3'], duration: '1/2' },
+    //   { notes: ['B2'], duration: '1/2' },
+    //   // intro bass measure 2
+    //   { notes: ['A2'], duration: '1/2' },
+    //   { notes: ['G2'], duration: '1/2' },
+    //   // intro bass measure 3
+    //   { notes: ['C3'], duration: '1/2' },
+    //   { notes: ['A#2'], duration: '1/2' },
+    //   // intro bass measure 4
+    //   { notes: ['B2'], duration: '1/2' },
+    //   { notes: ['G2'], duration: '1/2' },
+    //   // intro bass measure 5
+    //   { notes: [], duration: '1' },
+    //   // verse bass measure 1
+    //   { notes: ['C2'], duration: '1/2' },
+    //   { notes: ['A2'], duration: '1/2' },
+    //   // verse bass measure 2
+    //   { notes: ['G2'], duration: '1' },
+    //   // verse bass measure 3
+    //   { notes: ['F2'], duration: '1/2' },
+    //   { notes: ['F#2'], duration: '1/2' },
+    //   // verse bass measure 4
+    //   { notes: ['G2'], duration: '1/2' },
+    //   { notes: ['C2'], duration: '1/2' },
+    //   // verse bass measure 5
+    //   { notes: ['F2'], duration: '1/2' },
+    //   { notes: ['F#2'], duration: '1/2' },
+    //   // verse bass measure 6
+    //   { notes: ['G2'], duration: '1/2' },
+    //   { notes: ['C2'], duration: '1/2' },
+    //   // verse bass measure 7
+    //   { notes: ['D2'], duration: '1/2' },
+    //   { notes: ['B2'], duration: '1/2' },
+    //   // verse bass measure 8
+    //   { notes: ['E3'], duration: '1/2' },
+    //   { notes: ['G2'], duration: '1/2' },
+    //   // verse bass measure 9
+    //   { notes: ['C2'], duration: '1' },
+    // ],
   ]);
 
   song1;
