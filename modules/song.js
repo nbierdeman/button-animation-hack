@@ -26,15 +26,29 @@ export default class Song {
     this.masterVolume.gain.value = 0.3;
     this.masterVolume.connect(this.audioContext.destination);
     this.startDelay = 0.1;
+    this.isPlaying = false;
 
     this.allOscillators = [];
-    this.isPlaying = false;
     this.notesQueue = [];
-    this.beatNumber = 1;
-    this.lastNoteEndTime = 0;
     this.lastBeatStartTime = 0;
 
+    this.tracks = [];
+
+    this.beatNumber = 1;
     this.onBeatCallbacks = [];
+  }
+
+  play(tracks) {
+    tracks.forEach((track, trackIndex) => {
+      this.tracks.push({
+        lastNoteEndTime: 0,
+      });
+
+      track.forEach((notes) => {
+        this.playNotes.bind(this)({ ...notes, trackIndex });
+      });
+    });
+
     this.onBeatInterval();
   }
 
@@ -47,18 +61,22 @@ export default class Song {
     releaseTime = 0.1,
     attackGain = 1,
     sustainGain = 0.75,
+    trackIndex = 0,
   }) {
     this.isPlaying = true;
     const durationInSeconds = this.notesInSeconds[duration];
 
-    if (this.lastNoteEndTime <= this.audioContext.currentTime) {
+    if (
+      this.tracks[trackIndex].lastNoteEndTime <= this.audioContext.currentTime
+    ) {
       // start the song
-      this.lastNoteEndTime = this.audioContext.currentTime + this.startDelay;
+      this.tracks[trackIndex].lastNoteEndTime =
+        this.audioContext.currentTime + this.startDelay;
       this.lastBeatTime = this.audioContext.currentTime + this.startDelay;
     }
 
-    const offset = this.lastNoteEndTime;
-    this.lastNoteEndTime += durationInSeconds;
+    const offset = this.tracks[trackIndex].lastNoteEndTime;
+    this.tracks[trackIndex].lastNoteEndTime += durationInSeconds;
 
     const oscillators = notes.map((note) => {
       const frequency = frequencyFromNote(note);
@@ -100,12 +118,12 @@ export default class Song {
       feedback: 0.1,
       cutoff: 14700,
       wetLevel: 1,
-      dryLevel: 1
+      dryLevel: 1,
     });
 
     const bitcrusher = this.createBitcrusher({
       bits: 16,
-      normfreq: 0.5
+      normfreq: 0.5,
     });
 
     // signal routing
@@ -134,7 +152,7 @@ export default class Song {
   onBeatInterval() {
     if (
       !this.notesQueue.length &&
-      this.lastNoteEndTime < this.audioContext.currentTime
+      this.tracks[0].lastNoteEndTime < this.audioContext.currentTime
     ) {
       // stop after the song is over
       this.lastBeatTime = 0;
@@ -179,19 +197,21 @@ export default class Song {
     });
   }
 
-  createBitcrusher({
-    bits = 4,
-    bufferSize = 4096,
-    normfreq = 0.1
-  }) {
+  createBitcrusher({ bits = 4, bufferSize = 4096, normfreq = 0.1 }) {
     const processor = this.audioContext.createScriptProcessor(bufferSize, 1, 1);
 
-    let phaser = 0, last = 0, processorInput, processorOutput, step, i, length;
+    let phaser = 0,
+      last = 0,
+      processorInput,
+      processorOutput,
+      step,
+      i,
+      length;
 
-    processor.onaudioprocess = function(e) {
-      processorInput = e.inputBuffer.getChannelData(0),
-      processorOutput = e.outputBuffer.getChannelData(0),
-      step = Math.pow(1 / 2, bits);
+    processor.onaudioprocess = function (e) {
+      (processorInput = e.inputBuffer.getChannelData(0)),
+        (processorOutput = e.outputBuffer.getChannelData(0)),
+        (step = Math.pow(1 / 2, bits));
       length = processorInput.length;
       for (i = 0; i < length; i++) {
         phaser += normfreq;
@@ -310,9 +330,11 @@ export default class Song {
       this.allOscillators = [];
       this.notesQueue = [];
       this.beatNumber = 1;
-      this.lastNoteEndTime = 0;
+
       this.lastBeatStartTime = 0;
       this.isPlaying = false;
+
+      this.tracks = this.tracks.map(() => ({ lastNoteEndTime: 0 }));
     }, 1000);
   }
 }

@@ -53,45 +53,109 @@ playButton.addEventListener('click', () => {
     return;
   }
 
-  song1
-    // measure 1
-    .playNotes({ notes: ['G4'], duration: '1/2' })
-    .playNotes({ notes: ['E4'], duration: '3/8' })
-    .playNotes({ notes: ['F4'], duration: '1/8' })
-    // measure 2
-    .playNotes({ notes: ['G4'], duration: '1/4' })
-    .playNotes({ notes: ['C5'], duration: '1/2' })
-    .playNotes({ notes: ['B4'], duration: '1/8' })
-    .playNotes({ notes: ['C5'], duration: '1/8' })
-    // measure 3
-    .playNotes({ notes: ['D5'], duration: '1/4' })
-    .playNotes({ notes: ['C5'], duration: '1/4' })
-    .playNotes({ notes: ['B4'], duration: '1/4' })
-    .playNotes({ notes: ['A4'], duration: '1/4' })
-    // measure 4
-    .playNotes({ notes: ['G4'], duration: '3/4' })
-    .playNotes({ notes: ['B4'], duration: '1/8' })
-    .playNotes({ notes: ['C5'], duration: '1/8' })
-    // measure 5
-    .playNotes({ notes: ['D5'], duration: '1/4' })
-    .playNotes({ notes: ['C5'], duration: '1/4' })
-    .playNotes({ notes: ['B4'], duration: '1/4' })
-    .playNotes({ notes: ['A4'], duration: '1/8' })
-    .playNotes({ notes: ['A4'], duration: '1/8' })
-    // measure 6
-    .playNotes({ notes: ['G4'], duration: '1/4' })
-    .playNotes({ notes: ['C5'], duration: '1/4' })
-    .playNotes({ notes: ['E4'], duration: '1/4' })
-    .playNotes({ notes: ['G4'], duration: '1/8' })
-    .playNotes({ notes: ['A4'], duration: '1/8' })
-    // measure 7
-    .playNotes({ notes: ['G4'], duration: '1/4' })
-    .playNotes({ notes: ['F4'], duration: '1/4' })
-    .playNotes({ notes: ['E4'], duration: '1/4' })
-    .playNotes({ notes: ['F4'], duration: '1/4' })
-    // measure 8
-    .playNotes({ notes: ['G4'], duration: '3/4' })
-    .playNotes({ notes: [], duration: '1/4' });
+  song1.play([
+    [
+      // somewhat followed this sheet music: https://www.pinterest.com/pin/369858188132194112/
+      // intro chords measure 1
+      { notes: ['G3', 'C4', 'B4', 'E5'], duration: '1' },
+      // intro chords measure 2
+      { notes: ['G3', 'C4', 'E4', 'B4'], duration: '1' },
+      // intro chords measure 3
+      { notes: ['E3', 'G3', 'B3', 'C4'], duration: '1/2' },
+      { notes: ['Db3', 'G3', 'Bb3', 'C#4'], duration: '1/2' },
+      // intro chords measure 4
+      { notes: ['D3', 'G3', 'B3', 'F4'], duration: '1' },
+      // intro chords measure 5
+      { notes: [], duration: '1' },
+      // verse chords measure 1
+      { notes: ['E3', 'G3', 'B3', 'C4'], duration: '1' },
+      // verse chords measure 2
+      { notes: ['E3', 'G3', 'B3', 'C4'], duration: '1' },
+      // verse chords measure 3
+      { notes: ['F3', 'A3', 'C4', 'E4'], duration: '1/2' },
+      { notes: ['F#3', 'A3', 'C4', 'Eb4'], duration: '1/2' },
+      // verse chords measure 4
+      { notes: ['E3', 'G3', 'B3', 'C4'], duration: '1' },
+      // verse chords measure 5
+      { notes: ['F3', 'A3', 'C4', 'E4'], duration: '1/2' },
+      { notes: ['F#3', 'A3', 'C4', 'Eb4'], duration: '1/2' },
+      // verse chords measure 6
+      { notes: ['E3', 'G3', 'B3', 'C4'], duration: '1/2' },
+      { notes: ['E3', 'A3', 'C3', 'G4'], duration: '1/2' },
+      // verse chords measure 7
+      { notes: ['D3', 'A3', 'C3', 'F4'], duration: '1/2' },
+      { notes: ['D3', 'B3', 'G3', 'E4'], duration: '1/4' },
+      { notes: ['D3', 'B3', 'G3', 'F4'], duration: '1/4' },
+      // verse chords measure 8
+      { notes: ['C3', 'B3', 'G3', 'E4'], duration: '1/2' },
+      { notes: ['F3', 'B3', 'G3', 'D4'], duration: '1/2' },
+      // verse chords measure 9
+      { notes: ['C3', 'E3', 'G3', 'C4'], duration: '1' },
+    ],
+    [
+      // intro melody measure 1
+      { notes: ['G4'], duration: '1/8' },
+      { notes: ['G4'], duration: '1/8' },
+      { notes: ['G4'], duration: '1/4' },
+      { notes: ['E4', 'G4'], duration: '1/4' },
+      { notes: ['E4', 'G4'], duration: '1/4' },
+      // intro melody measure 2
+      { notes: ['G4'], duration: '1/8' },
+      { notes: ['G4'], duration: '1/8' },
+      { notes: ['G4'], duration: '1/4' },
+      { notes: ['E4', 'G4'], duration: '1/4' },
+      { notes: ['E4', 'G4'], duration: '1/4' },
+      // intro melody measure 3
+      { notes: ['A4'], duration: '1/4' },
+      { notes: ['G4'], duration: '1/4' },
+      { notes: ['E4'], duration: '1/4' },
+      { notes: ['F4'], duration: '1/4' },
+      // intro melody measure 4
+      { notes: ['F4', 'G4'], duration: '1' },
+      // intro melody measure 5
+      { notes: [], duration: '1' },
+      // verse melody measure 1
+      { notes: ['G4'], duration: '1/2' },
+      { notes: ['E4'], duration: '3/8' },
+      { notes: ['F4'], duration: '1/8' },
+      // verse melody measure 2
+      { notes: ['G4'], duration: '1/4' },
+      { notes: ['C5'], duration: '1/2' },
+      { notes: ['B4'], duration: '1/8' },
+      { notes: ['C5'], duration: '1/8' },
+      // verse melody measure 3
+      { notes: ['D5'], duration: '1/4' },
+      { notes: ['C5'], duration: '1/4' },
+      { notes: ['B4'], duration: '1/4' },
+      { notes: ['A4'], duration: '1/4' },
+      // verse melody measure 4
+      { notes: ['G4'], duration: '3/4' },
+      { notes: ['B4'], duration: '1/8' },
+      { notes: ['C5'], duration: '1/8' },
+      // verse melody measure 5
+      { notes: ['D5'], duration: '1/4' },
+      { notes: ['C5'], duration: '1/4' },
+      { notes: ['B4'], duration: '1/4' },
+      { notes: ['A4'], duration: '1/8' },
+      { notes: ['A4'], duration: '1/8' },
+      // verse melody measure 6
+      { notes: ['G4'], duration: '1/4' },
+      { notes: ['C5'], duration: '1/4' },
+      { notes: ['E4'], duration: '1/4' },
+      { notes: ['G4'], duration: '1/8' },
+      { notes: ['A4'], duration: '1/8' },
+      // verse melody measure 7
+      { notes: ['G4'], duration: '1/4' },
+      { notes: ['F4'], duration: '1/4' },
+      { notes: ['E4'], duration: '1/4' },
+      { notes: ['F4'], duration: '1/4' },
+      // verse melody measure 8
+      { notes: ['G4'], duration: '1/2' },
+      { notes: [], duration: '1/2' },
+    ],
+  ]);
+
+  song1;
 
   setTimeout(() => {
     // reuse existing popup when playing again
