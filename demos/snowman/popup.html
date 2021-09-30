@@ -30,5 +30,12 @@
 
       beatNumberLabel.innerHTML = beatNumber;
     });
+
+    window.onunload = function () {
+      const parent = window.opener;
+      if (!parent.closed) {
+        song1.reset();
+      }
+    };
   </script>
 </body>

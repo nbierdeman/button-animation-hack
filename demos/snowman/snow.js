@@ -1,6 +1,4 @@
 export default class Snow {
-  MAX_SNOWFLAKES = 50;
-
   constructor({ canvasElement, width = 50, height = 50 }) {
     this.canvas = canvasElement;
     this.width = this.canvas.width = width;
@@ -9,40 +7,48 @@ export default class Snow {
     this.ctx = this.canvas.getContext('2d');
 
     this.angle = 0;
+    this.MAX_SNOWFLAKES = 50;
     this.snowflakes = this.createSnowflakes();
   }
 
-  createSnowflakes = () => {
-    return new Array(this.MAX_SNOWFLAKES).fill(0).map(() => {
+  createSnowflakes() {
+    const { width, height, MAX_SNOWFLAKES } = this;
+
+    return new Array(MAX_SNOWFLAKES).fill(0).map(() => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 2 + 1,
+      density: Math.random() + 1,
+    }));
+  }
+
+  moveFlakes() {
+    this.angle += 0.01;
+    const { width, height, angle, snowflakes } = this;
+
+    this.snowflakes = snowflakes.map((snowflake) => {
+      const y = snowflake.y + Math.pow(snowflake.density, 2) + 1;
+      const x = snowflake.x + Math.sin(angle) * 2;
+
+      if (y > height) {
+        // send the snowflake to the top to fall again
+        return {
+          x: Math.random() * width,
+          y: 0,
+          radius: snowflake.radius,
+          density: snowflake.density,
+        };
+      }
+
       return {
-        x: Math.random() * this.width,
-        y: Math.random() * this.height,
-        radius: Math.random() * 2 + 1,
-        density: Math.random() + 1,
+        ...snowflake,
+        x,
+        y,
       };
     });
-  };
+  }
 
-  moveFlakes = () => {
-    this.angle += 0.01;
-
-    this.snowflakes.forEach((snowflake, index) => {
-      snowflake.y += Math.pow(snowflake.density, 2) + 1;
-      snowflake.x += Math.sin(this.angle) * 2;
-
-        if (snowflake.y > this.height) {
-          // send the snowflake to the top to fall again
-          this.snowflakes[index] = {
-            x: Math.random() * this.width,
-            y: 0,
-            radius: snowflake.radius,
-            density: snowflake.density,
-          };
-        }
-    })
-  };
-
-  render = () => {
+  render() {
     const { ctx } = this;
 
     ctx.clearRect(0, 0, this.width, this.height);
@@ -52,9 +58,9 @@ export default class Snow {
     this.snowflakes.forEach((snowflake) => {
       ctx.moveTo(snowflake.x, snowflake.y);
       ctx.arc(snowflake.x, snowflake.y, snowflake.radius, 0, Math.PI * 2, true);
-    })
+    });
 
     ctx.fill();
     this.moveFlakes();
-  };
+  }
 }

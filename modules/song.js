@@ -27,6 +27,8 @@ export default class Song {
     this.masterVolume.connect(this.audioContext.destination);
     this.startDelay = 0.1;
 
+    this.allOscillators = [];
+    this.isPlaying = false;
     this.notesQueue = [];
     this.beatNumber = 1;
     this.lastNoteEndTime = 0;
@@ -46,6 +48,7 @@ export default class Song {
     attackGain = 1,
     sustainGain = 0.75,
   }) {
+    this.isPlaying = true;
     const durationInSeconds = this.notesInSeconds[duration];
 
     if (this.lastNoteEndTime <= this.audioContext.currentTime) {
@@ -71,6 +74,13 @@ export default class Song {
     let sustainTime = 0;
     if (durationInSeconds - attackTime - decayTime - releaseTime > 0) {
       sustainTime = durationInSeconds - attackTime - decayTime - releaseTime;
+    }
+
+    if (this.masterVolume.gain.value === 0) {
+      this.masterVolume.gain.linearRampToValueAtTime(
+        0.3,
+        this.audioContext.currentTime + 0.5,
+      );
     }
 
     const envelope = this.createADSREnvelope({
@@ -102,6 +112,7 @@ export default class Song {
     oscillators.forEach((oscillator) => {
       oscillator.connect(envelope);
       oscillator.start();
+      this.allOscillators.push(oscillator);
     });
     envelope.connect(bitcrusher);
     bitcrusher.connect(delayInput);
@@ -121,9 +132,13 @@ export default class Song {
   }
 
   onBeatInterval() {
-    if (this.lastNoteEndTime < this.audioContext.currentTime) {
+    if (
+      !this.notesQueue.length &&
+      this.lastNoteEndTime < this.audioContext.currentTime
+    ) {
       // stop after the song is over
       this.lastBeatTime = 0;
+      this.isPlaying = false;
     }
 
     if (
@@ -282,5 +297,22 @@ export default class Song {
     const imag = real.map(() => 0);
     const periodicWave = this.audioContext.createPeriodicWave(real, imag);
     return periodicWave;
+  }
+
+  reset() {
+    this.masterVolume.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+    this.masterVolume.gain.linearRampToValueAtTime(
+      0,
+      this.audioContext.currentTime + 0.5,
+    );
+    setTimeout(() => {
+      this.allOscillators.forEach((oscillator) => oscillator.stop());
+      this.allOscillators = [];
+      this.notesQueue = [];
+      this.beatNumber = 1;
+      this.lastNoteEndTime = 0;
+      this.lastBeatStartTime = 0;
+      this.isPlaying = false;
+    }, 1000);
   }
 }

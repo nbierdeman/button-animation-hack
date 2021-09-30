@@ -1,7 +1,6 @@
 import Song from '../../modules/song.js';
 import { openPopup } from '../../modules/popup.js';
 import Snowman from './snowman.js';
-import './snow.js'
 import Snow from './snow.js';
 
 const playButton = document.querySelector('#buttons-container1');
@@ -10,8 +9,7 @@ const snowCanvas = document.querySelector('#snow');
 
 const song1 = new Song({ beatsPerMinute: 140 });
 const canvas = new Snowman({ canvasElement });
-const snow = new Snow({canvasElement: snowCanvas, width: 750, height: 55});
-
+const snow = new Snow({ canvasElement: snowCanvas, width: 750, height: 55 });
 
 // share song with popup
 window.song = song1;
@@ -20,7 +18,7 @@ canvas.drawSnowMan();
 const startSnowing = () => {
   snow.render();
   requestAnimationFrame(startSnowing);
-}
+};
 startSnowing();
 
 const noteLabel = document.querySelector('#note');
@@ -37,7 +35,14 @@ song1.onBeat(({ currentNote, beatNumber }) => {
   beatNumberLabel.innerHTML = beatNumber;
 });
 
+let popup;
+
 playButton.addEventListener('click', () => {
+  // ignore the click when the song is already playing
+  if (song1.isPlaying) {
+    return;
+  }
+
   song1
     // measure 1
     .playNotes({ notes: ['G4'], duration: '1/2' })
@@ -79,11 +84,16 @@ playButton.addEventListener('click', () => {
     .playNotes({ notes: [], duration: '1/4' });
 
   setTimeout(() => {
-    openPopup({
-      url: 'popup.html',
-      name: 'testWindowName',
-      width: 600,
-      height: 600,
-    });
+    // reuse existing popup when playing again
+    if (popup) {
+      popup.focus();
+    } else {
+      popup = openPopup({
+        url: 'popup.html',
+        name: 'testWindowName',
+        width: 600,
+        height: 600,
+      });
+    }
   }, 1000);
 });
