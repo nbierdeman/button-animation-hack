@@ -60,8 +60,8 @@ playButton.addEventListener('click', () => {
     .playNotes({ notes: ['A4'], duration: '1/4' })
     // measure 4
     .playNotes({ notes: ['G4'], duration: '3/4' })
-    .playNotes({ notes: ['B4'], duration: '1/4' })
-    .playNotes({ notes: ['C5'], duration: '1/4' })
+    .playNotes({ notes: ['B4'], duration: '1/8' })
+    .playNotes({ notes: ['C5'], duration: '1/8' })
     // measure 5
     .playNotes({ notes: ['D5'], duration: '1/4' })
     .playNotes({ notes: ['C5'], duration: '1/4' })
