@@ -40,7 +40,7 @@ export default class Song {
     tracks.forEach((track, trackIndex) => {
       this.tracks.push({
         lastNoteEndTime: 0,
-        notesQueue: []
+        notesQueue: [],
       });
 
       track.forEach((notes) => {
@@ -128,9 +128,18 @@ export default class Song {
     // signal routing
     oscillators.forEach((oscillator) => {
       oscillator.connect(envelope);
-      oscillator.start();
+      oscillator.start(offset);
+      oscillator.stop(offset + durationInSeconds + 1);
       this.allOscillators.push(oscillator);
+
+      oscillator.onended = () => {
+        envelope.disconnect();
+        bitcrusher.disconnect();
+        delayOutput.disconnect();
+        compressor.disconnect();
+      };
     });
+
     envelope.connect(bitcrusher);
     bitcrusher.connect(delayInput);
     delayOutput.connect(compressor);
@@ -149,10 +158,14 @@ export default class Song {
   }
 
   onBeatInterval() {
-    if (!this.tracks[0] ||this.tracks[0].lastNoteEndTime < this.audioContext.currentTime) {
+    if (
+      !this.tracks[0] ||
+      this.tracks[0].lastNoteEndTime < this.audioContext.currentTime
+    ) {
       // stop after the song is over
       this.lastBeatTime = 0;
       this.isPlaying = false;
+      this.tracks = [];
     }
 
     if (
